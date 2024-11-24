@@ -5,6 +5,7 @@ protocol AIServiceProtocol: Sendable {
     func generateCommitMessage(for files: [GitFile]) async throws -> CommitMessage
     func getAIModels() async throws -> [String]
     func getSelectedAIModel() async  -> String?
+    func getBaseUrl() async  -> String?
     func promptForModelSelection() async throws -> String
     func setModel(_ modelName: String) async throws
 }
@@ -226,5 +227,9 @@ extension OllamaService{
     
     func getSelectedAIModel() async  -> String? {
         return model.isEmpty ? nil : model
+    }
+    
+    func getBaseUrl() async -> String? {
+        return config.baseURL.absoluteString
     }
 }
