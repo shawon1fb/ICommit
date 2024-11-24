@@ -145,7 +145,7 @@ actor OllamaService: AIServiceProtocol {
             }
             
             let selectedModel = models[selection - 1]
-            await logger.debug("Model set to: \(selectedModel)")
+            await logger.debug("Model set to: \(selectedModel)".red)
             return selectedModel
         }
     }
