@@ -12,6 +12,7 @@ enum CLIError: LocalizedError {
     case aiGenerationFailed(String)
     case invalidUserInput
     case invalidGitRepository
+    case userCancelled
     
     var errorDescription: String? {
         switch self {
@@ -25,6 +26,8 @@ enum CLIError: LocalizedError {
             return "Invalid user input"
         case .invalidGitRepository:
             return "Invalid Git repository"
+        case .userCancelled:
+            return "User cancelled"
         }
     }
 }
