@@ -27,3 +27,8 @@ To build the project in release configuration and copy the executable to `/usr/l
 swift build -c release
 sudo cp .build/release/ICommit /usr/local/bin/
 ```
+
+## env path
+export OLLAMA_HOST=192.168.0.213
+export OLLAMA_PORT=11434
+export OLLAMA_MODEL=llama2:3b
