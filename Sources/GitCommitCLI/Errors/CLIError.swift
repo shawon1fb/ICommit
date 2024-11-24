@@ -13,6 +13,7 @@ enum CLIError: LocalizedError {
     case invalidUserInput
     case invalidGitRepository
     case userCancelled
+    case gitBranchError(String)
     
     var errorDescription: String? {
         switch self {
@@ -28,6 +29,8 @@ enum CLIError: LocalizedError {
             return "Invalid Git repository"
         case .userCancelled:
             return "User cancelled"
+        case .gitBranchError(let message):
+            return "Git branch error: \(message)"
         }
     }
 }
