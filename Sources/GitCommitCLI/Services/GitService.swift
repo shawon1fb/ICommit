@@ -12,6 +12,8 @@ protocol GitServiceProtocol: Sendable {
   func getStagedFiles() async throws -> [GitFile]
   func commit(message: String) async throws
   func push() async throws
+  func getAllBranchNames() async throws -> [String]
+  func getCurrentBranchName() async throws -> String
 }
 
 @available(macOS 14.0, *)
@@ -61,5 +63,42 @@ extension GitService {
 
     await logger.debug("Found \(files.count) staged files")
     return files
+  }
+}
+@available(macOS 14.0, *)
+extension GitService {
+  func getAllBranchNames() async throws -> [String] {
+    await logger.debug("Getting all branch names...")
+    let command = "git branch --format='%(refname:short)'"
+
+    await logger.command(command)
+
+    let branchOutput = try await shell.execute(command)
+    let branches =
+      branchOutput
+      .split(separator: "\n")
+      .map(String.init)
+      .map { $0.trimmingCharacters(in: .whitespaces) }
+      .filter { !$0.isEmpty }
+
+    await logger.debug("Found \(branches.count) branches")
+    return branches
+  }
+
+  func getCurrentBranchName() async throws -> String {
+    await logger.debug("Getting current branch name...")
+    let command = "git rev-parse --abbrev-ref HEAD"
+
+    await logger.command(command)
+
+    let branchName = try await shell.execute(command)
+      .trimmingCharacters(in: .whitespacesAndNewlines)
+
+    if branchName.isEmpty {
+      throw CLIError.gitBranchError("Unable to determine current branch")
+    }
+
+    await logger.debug("Current branch: \(branchName)")
+    return branchName
   }
 }
