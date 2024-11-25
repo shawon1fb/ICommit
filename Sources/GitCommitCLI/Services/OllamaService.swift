@@ -50,7 +50,7 @@ actor OllamaService: AIServiceProtocol {
     private var lastFetchTime: Date?
     private let cacheDuration: TimeInterval = 300 // 5 minutes cache
     
-    init(logger: Logger = .init(isVerbose: true), initialModel: String? = nil) {
+    init(logger: Logger = .init(isVerbose: false), initialModel: String? = nil) {
         self.logger = logger
         let config = Config.loadFromEnvironment()
         self.config = config
@@ -122,9 +122,9 @@ actor OllamaService: AIServiceProtocol {
             throw CLIError.aiGenerationFailed("No AI models available")
         }
         
-        print("\nAvailable models:")
+        print("\nAvailable models:".blue)
         for (index, model) in models.enumerated() {
-            print("\(index + 1). \(model)")
+            print("\(index + 1). \(model)".green)
         }
         
         while true {
