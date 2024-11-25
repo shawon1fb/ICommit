@@ -61,14 +61,15 @@ struct GitCommitCLI: ParsableCommand, Decodable {
     files.forEach { print($0.path.green) }
 
     if let baseURL = await aiService.getBaseUrl() {
-      print("\nBaseURL : \(baseURL)".red)
+        print("\nBaseURL : \(baseURL)".blue)
     }
 
     //Check model is selected
     if let _ = await aiService.getSelectedAIModel() {
     } else {
       print("\nOllama model not found in environment. Select from available models:".red)
-        print("\nTo select a model, set the OLLAMA_MODEL environment variable.\n\nexport OLLAMA_MODEL=your_model_name\n\n".gray)
+        print("\nTo select a model, set the OLLAMA_MODEL environment variable.".gray)
+        print("\n\nexport OLLAMA_MODEL=your_model_name\n\n".yellow)
       let _ = try await aiService.getAIModels()
       let selectedModel = try await aiService.promptForModelSelection()
       try await aiService.setModel(selectedModel)
