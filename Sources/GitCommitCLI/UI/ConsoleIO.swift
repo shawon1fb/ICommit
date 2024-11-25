@@ -20,15 +20,19 @@ actor ConsoleIO {
 }
 
 // Add this to ConsoleIO class
+// Update ConsoleIO extension to support zero as an option
 extension ConsoleIO {
-    func askForChoice(options: Int) async -> Int {
+    func askForChoice(options: Int, includeZero: Bool = false) async -> Int {
         while true {
-            if let input = await askForInput("Enter your choice (1-\(options)):"),
+            let range = includeZero ? "0-\(options)" : "1-\(options)"
+            if let input = await askForInput("Enter your choice (\(range)):"),
                let choice = Int(input),
-               choice >= 1 && choice <= options {
+               (includeZero && choice >= 0 && choice <= options) ||
+               (!includeZero && choice >= 1 && choice <= options) {
                 return choice
             }
-            print("Invalid choice. Please enter a number between 1 and \(options)".red)
+            let validRange = includeZero ? "0 and \(options)" : "1 and \(options)"
+            print("Invalid choice. Please enter a number between \(validRange)".red)
         }
     }
 }
