@@ -24,7 +24,7 @@ TMP_DIR=$(mktemp -d)
 cd $TMP_DIR
 
 PACKAGE_NAME="i-commit-${VERSION}-${PLATFORM}"
-DOWNLOAD_URL="https://github.com/${GITHUB_USER}/${REPO}/releases/download/v${VERSION}/${PACKAGE_NAME}.zip"
+DOWNLOAD_URL="https://github.com/${GITHUB_USER}/${REPO}/releases/${PACKAGE_NAME}.zip"
 
 echo "Downloading from: $DOWNLOAD_URL"
 
