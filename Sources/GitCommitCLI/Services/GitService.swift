@@ -11,15 +11,15 @@ import Foundation
 protocol GitServiceProtocol: Sendable {
   func getStagedFiles() async throws -> [GitFile]
   func commit(message: String) async throws
-  func push() async throws
+    func push(branchName: String? ) async throws
   func getAllBranchNames() async throws -> [String]
   func getCurrentBranchName() async throws -> String
 }
-
 @available(macOS 14.0, *)
 actor GitService: GitServiceProtocol {
   private let shell: ShellServiceProtocol
   private let logger: Logger = Logger(isVerbose: false)
+  
   init(shell: ShellServiceProtocol = ShellService()) {
     self.shell = shell
   }
@@ -28,10 +28,36 @@ actor GitService: GitServiceProtocol {
     let _ = try await shell.execute("git commit -m \"\(message)\"")
   }
 
-  func push() async throws {
-    let _ = try await shell.execute("git push")
+    func push(branchName: String? = nil) async throws {
+    await logger.debug("Pushing changes...")
+      
+      let activeBranch = try await getCurrentBranchName()
+      
+    let currentBranch = branchName ?? activeBranch
+    
+    // Check if remote branch exists
+    let remoteBranchExists = try await checkRemoteBranchExists(currentBranch)
+    
+    let pushCommand = if remoteBranchExists {
+      "git push"
+    } else {
+      "git push --set-upstream origin \(currentBranch)"
+    }
+    
+    await logger.command(pushCommand)
+    let _ = try await shell.execute(pushCommand)
+    await logger.debug("Successfully pushed to \(currentBranch)")
+  }
+  
+  private func checkRemoteBranchExists(_ branch: String) async throws -> Bool {
+    let command = "git ls-remote --heads origin \(branch)"
+    await logger.command(command)
+    let output = try await shell.execute(command)
+    return !output.isEmpty
   }
 }
+
+
 @available(macOS 14.0, *)
 extension GitService {
   func getStagedFiles() async throws -> [GitFile] {
