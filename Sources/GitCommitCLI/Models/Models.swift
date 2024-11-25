@@ -8,7 +8,7 @@ import Foundation
 // Sources/GitCommitCLI/Models/Models.swift
 @available(macOS 14.0, *)
 enum CommitType: String, CaseIterable, Sendable {
-    case feat, fix, docs, style, refactor, test, chore
+    case feat, fix, docs, style, refactor, test, chore, build
     
     var description: String {
         switch self {
@@ -19,6 +19,7 @@ enum CommitType: String, CaseIterable, Sendable {
         case .refactor: "Code refactoring"
         case .test: "Testing"
         case .chore: "Maintenance"
+        case .build: "Build"
         }
     }
 }

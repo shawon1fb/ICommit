@@ -166,7 +166,7 @@ actor OllamaService: AIServiceProtocol {
             \(filesContent)
 
             Response format: <type>(<scope>): <description>
-            Types: feat, fix, docs, style, refactor, test, chore
+            Types: feat, fix, docs, style, refactor, test, chore, build
             Keep description under 75 characters.
             Return only the commit message, nothing else.
             """

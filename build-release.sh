@@ -2,26 +2,33 @@
 
 VERSION="1.0.0"
 PLATFORMS=("x86_64-apple-macosx" "arm64-apple-macosx")
-OUTPUT_DIR="releases"
 
-mkdir -p $OUTPUT_DIR
+# Create release directory
+rm -rf release && mkdir -p release
 
 for platform in "${PLATFORMS[@]}"; do
     echo "Building for $platform..."
+    
+    # Build binary
     swift build -c release --triple $platform
     
-    BINARY_NAME="i-commit-$VERSION-$platform"
-    cp .build/$platform/release/ICommit "$OUTPUT_DIR/$BINARY_NAME"
+    # Create release package
+    PACKAGE_NAME="i-commit-${VERSION}-${platform}"
+    mkdir -p "release/${PACKAGE_NAME}"
+    
+    # Copy binary
+    cp ".build/${platform}/release/ICommit" "release/${PACKAGE_NAME}/i-commit"
     
     # Create checksum
-    shasum -a 256 "$OUTPUT_DIR/$BINARY_NAME" > "$OUTPUT_DIR/$BINARY_NAME.sha256"
+    cd "release/${PACKAGE_NAME}"
+    shasum -a 256 i-commit > checksum.sha256
+    
+    # Create zip
+    zip "../${PACKAGE_NAME}.zip" i-commit checksum.sha256
+    cd ../..
+    
+    # Cleanup
+    rm -rf "release/${PACKAGE_NAME}"
 done
 
-# Create zip archives
-cd $OUTPUT_DIR
-for file in i-commit-*; do
-    if [[ ! $file == *.sha256 ]]; then
-        zip "$file.zip" "$file"
-        rm "$file"
-    fi
-done
+echo "Release packages created in release/"

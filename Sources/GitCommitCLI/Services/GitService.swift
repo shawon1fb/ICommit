@@ -18,7 +18,7 @@ protocol GitServiceProtocol: Sendable {
 @available(macOS 14.0, *)
 actor GitService: GitServiceProtocol {
   private let shell: ShellServiceProtocol
-  private let logger: Logger = Logger(isVerbose: false)
+  private let logger: Logger = Logger(isVerbose: true)
   
   init(shell: ShellServiceProtocol = ShellService()) {
     self.shell = shell
@@ -83,8 +83,8 @@ extension GitService {
       .map(String.init)
       .concurrentMap { @Sendable [shell, logger] fileName in
         await logger.debug("Getting changes for file: \(fileName)")
-        let changes = try await shell.execute("git diff --cached \(fileName)")
-        return GitFile(path: fileName, changes: changes)
+        let changes = try? await shell.execute("git diff --cached \(fileName)")
+        return GitFile(path: fileName, changes: changes ?? "\(fileName) added")
       }
 
     await logger.debug("Found \(files.count) staged files")
