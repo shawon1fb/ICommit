@@ -1,76 +1,65 @@
 # ICommit 🤖
 
-Generate meaningful git commit messages using AI without leaving your terminal.
+Let AI write your git commit messages! ICommit analyzes your changes and generates meaningful commits right in your terminal.
 
-## Key Features
+![ICommit Demo](demo.gif)
 
-- **AI-Powered Messages**: Uses Ollama to analyze your staged changes and generate semantic commit messages
-- **Interactive Mode**: Review, regenerate, or edit suggested commit messages
-- **Git Integration**: One-step commit and push after message approval
-- **Branch Management**: View and select target branches for pushing changes
-- **Conventional Commits**: Follows standard commit message format (type, scope, description)
-
-## Quick Start
+## 🚀 Quick Install
 
 ```bash
-# Install
-swift build -c release
-sudo cp .build/release/ICommit /usr/local/bin/
+# One-line install
+curl -fsSL https://raw.githubusercontent.com/shawon1fb/ICommit/main/install.sh | bash
+```
 
-# Run
+## 💫 How to Use
+
+1. Stage your files:
+```bash
+git add .
+```
+
+2. Let AI generate a commit message:
+```bash
 ICommit
 ```
 
-## Requirements
+3. Choose what to do:
+   - ✅ Accept the message
+   - 🔄 Generate a new one
+   - ✍️ Edit it yourself
+
+## ✨ What You Get
+
+- 🤖 AI-powered commit messages
+- 🔄 Interactive message editor
+- 🌳 Branch management
+- 🚀 One-click commit & push
+- 📝 Conventional commit format
+
+## 📋 Requirements
 
 - macOS 14.0+
-- Swift installed
-- Ollama server running
+- Ollama running locally
 
-## Configuration
+## ⚙️ Custom Setup (Optional)
 
-Set Ollama environment variables:
 ```bash
+# Configure Ollama
 export OLLAMA_HOST=your_server_ip    # Default: localhost
 export OLLAMA_PORT=11434             # Default: 11434
 export OLLAMA_MODEL=your_model       # Default: llama2
 ```
 
-## Usage Example
+## 🤔 Common Issues
 
-```bash
-# Stage your changes
-git add .
+1. **Nothing happens?**
+   - Check if Ollama is running
+   - Make sure you staged files (`git add`)
 
-# Generate commit message
-ICommit
+2. **Custom server?**
+   - Update OLLAMA_HOST in Custom Setup
 
-# Review options:
-# 1. Accept generated message
-# 2. Generate new message
-# 3. Edit message manually
-# - Edit commit type
-# - Modify scope
-# - Update description
+Need more help? [Open an issue](https://github.com/shawon1fb/ICommit/issues)
 
-# Confirm and push
-```
-
-## Development
-
-```bash
-# Build
-swift build
-
-# Run locally
-swift run ICommit
-
-# Clean
-swift package clean
-```
-
-## Need Help?
-
-- Check Ollama server is running
-- Verify environment variables
-- Ensure files are staged before running
+## 💻 Supported Systems
+- Works on all Macs (M1/M2/Intel)
