@@ -67,6 +67,7 @@ struct GitCommitCLI: ParsableCommand, Decodable {
     //Check model is selected
     if let _ = await aiService.getSelectedAIModel() {
     } else {
+      print("\nOllama model not found in environment. Select from available models:".red)
       let _ = try await aiService.getAIModels()
       let selectedModel = try await aiService.promptForModelSelection()
       try await aiService.setModel(selectedModel)
@@ -77,7 +78,7 @@ struct GitCommitCLI: ParsableCommand, Decodable {
     var commitMessage = try await aiService.generateCommitMessage(for: files)
     await spinner.stop()
 
-//    print("\nGenerated commit message: ".yellow + commitMessage.formatted)
+    //    print("\nGenerated commit message: ".yellow + commitMessage.formatted)
 
     //TODO: add option to regenerate commit message again
     // TODO: add option to edit generated message
