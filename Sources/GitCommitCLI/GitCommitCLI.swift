@@ -68,6 +68,7 @@ struct GitCommitCLI: ParsableCommand, Decodable {
     if let _ = await aiService.getSelectedAIModel() {
     } else {
       print("\nOllama model not found in environment. Select from available models:".red)
+        print("\nTo select a model, set the OLLAMA_MODEL environment variable.\n\nexport OLLAMA_MODEL=your_model_name\n\n".gray)
       let _ = try await aiService.getAIModels()
       let selectedModel = try await aiService.promptForModelSelection()
       try await aiService.setModel(selectedModel)
