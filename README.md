@@ -1,83 +1,76 @@
-# Project Setup Guide
+# ICommit 🤖
 
-This guide will help you set up and build the project on your system.
+Generate meaningful git commit messages using AI without leaving your terminal.
 
-## Prerequisites
+## Key Features
 
-Before you begin, make sure you have:
-- Swift installed on your system
-- Administrative (sudo) privileges
-- Ollama set up on your network
+- **AI-Powered Messages**: Uses Ollama to analyze your staged changes and generate semantic commit messages
+- **Interactive Mode**: Review, regenerate, or edit suggested commit messages
+- **Git Integration**: One-step commit and push after message approval
+- **Branch Management**: View and select target branches for pushing changes
+- **Conventional Commits**: Follows standard commit message format (type, scope, description)
 
-## Environment Configuration
-
-Set up the required environment variables for Ollama:
-
-```bash
-export OLLAMA_HOST=192.168.0.10    # Your Ollama server IP address
-export OLLAMA_PORT=11434            # Ollama server port
-export OLLAMA_MODEL=llama2:3b       # LLM model to use
-```
-
-💡 **Tip**: Add these environment variables to your `.bashrc` or `.zshrc` to make them permanent.
-
-## Project Commands
-
-### 1. Cleaning the Project
-
-If you need to start fresh or clean up build artifacts:
+## Quick Start
 
 ```bash
-# Remove all build artifacts and Xcode project files
-rm -rf .build
-rm -rf *.xcodeproj
-```
-
-### 2. Development Build
-
-For developers working on the project:
-
-```bash
-# Clean and rebuild the project in debug mode
-swift package clean
-swift package resolve
-swift build
-```
-
-### 3. Running the Project
-
-To run the project directly:
-
-```bash
-# Run in development mode
-swift run ICommit
-```
-
-This command builds (if necessary) and executes the project in a single step. It's perfect for testing your changes during development.
-
-### 4. Production Installation
-
-To install the project for production use:
-
-```bash
-# Build optimized release version
+# Install
 swift build -c release
-
-# Install to system directory (requires sudo)
 sudo cp .build/release/ICommit /usr/local/bin/
+
+# Run
+i-commit
 ```
 
-After installation, you can run `ICommit` directly from anywhere in your terminal.
+## Requirements
 
-## Troubleshooting
+- macOS 14.0+
+- Swift installed
+- Ollama server running
 
-- If you encounter permission issues during installation, make sure you have the necessary sudo privileges
-- Verify that the Ollama server is running at the specified host and port
-- Check that the specified LLM model is available on your Ollama server
+## Configuration
+
+Set Ollama environment variables:
+```bash
+export OLLAMA_HOST=your_server_ip    # Default: localhost
+export OLLAMA_PORT=11434             # Default: 11434
+export OLLAMA_MODEL=your_model       # Default: llama2
+```
+
+## Usage Example
+
+```bash
+# Stage your changes
+git add .
+
+# Generate commit message
+i-commit
+
+# Review options:
+# 1. Accept generated message
+# 2. Generate new message
+# 3. Edit message manually
+# - Edit commit type
+# - Modify scope
+# - Update description
+
+# Confirm and push
+```
+
+## Development
+
+```bash
+# Build
+swift build
+
+# Run locally
+swift run ICommit
+
+# Clean
+swift package clean
+```
 
 ## Need Help?
 
-If you encounter any issues or need assistance, please:
-1. Check if all prerequisites are properly installed
-2. Verify your environment variables are correctly set
-3. Try cleaning and rebuilding the project
+- Check Ollama server is running
+- Verify environment variables
+- Ensure files are staged before running
