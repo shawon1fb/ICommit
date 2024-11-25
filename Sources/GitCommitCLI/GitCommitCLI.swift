@@ -107,7 +107,7 @@ struct GitCommitCLI: ParsableCommand, Decodable {
       // Ask for push
       if await consoleIO.askYesNo("Do you want to push to '\(currentBranch)'?") {
         await spinner.start(message: "Pushing to remote")
-        try await gitService.push()
+          try await gitService.push(branchName: currentBranch)
         await spinner.stop()
         print("Successfully pushed to remote!".green)
       }
