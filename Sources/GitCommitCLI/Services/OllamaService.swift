@@ -193,33 +193,45 @@ actor OllamaService: AIServiceProtocol {
     }
     
     private func parseCommitMessage(_ message: String) throws -> CommitMessage {
-        let messageParts = message.split(separator: ":", maxSplits: 1)
+        // Remove any preceding text if present
+        let actualMessage = message.components(separatedBy: ":\n").last ?? message
+        
+        let messageParts = actualMessage.split(separator: ":", maxSplits: 1)
         guard messageParts.count == 2 else {
             throw CLIError.aiGenerationFailed("Invalid commit message format: missing description")
         }
         
-        let typeAndScope = String(messageParts[0])
+        var tempScope = String(messageParts[0])
+        tempScope.removeAll(where: { !$0.isLetter && !$0.isNumber && $0 != "(" && $0 != ")" })
+
+        let typeAndScope = tempScope.trimmingCharacters(in: .whitespaces)
         let description = String(messageParts[1]).trimmingCharacters(in: .whitespaces)
         
         // Parse type and scope
-        let typeScopeParts = typeAndScope.split(separator: "(")
-        guard
-            typeScopeParts.count == 2,
-            let typeString = typeScopeParts.first.map(String.init),
-            let type = CommitType(rawValue: typeString),
-            let scopeWithParenthesis = typeScopeParts.last.map(String.init)
-        else {
-            throw CLIError.aiGenerationFailed("Invalid commit type or scope format")
+        if typeAndScope.contains("(") {
+            // Handle type with scope
+            let typeScopeParts = typeAndScope.split(separator: "(", maxSplits: 1)
+//            print("typeScopeParts is : \(typeScopeParts)")
+            guard
+                let typeString = typeScopeParts.first.map(String.init),
+                let type = CommitType(rawValue: typeString),
+                let scopeWithParenthesis = typeScopeParts.last.map(String.init)
+            else {
+                print("message is : \(message)")
+                throw CLIError.aiGenerationFailed("Invalid commit type or scope format")
+            }
+            
+            let scope = scopeWithParenthesis.trimmingCharacters(in: CharacterSet(charactersIn: "()"))
+            return CommitMessage(type: type, scope: scope, description: description)
+        } else {
+            // Handle type without scope
+            guard let type = CommitType(rawValue: typeAndScope) else {
+                print("message is : \(message)")
+                print("typeAndScope is : \(typeAndScope)")
+                throw CLIError.aiGenerationFailed("Invalid commit type")
+            }
+            return CommitMessage(type: type, scope: "", description: description)
         }
-        
-        // Remove trailing parenthesis from scope
-        let scope = scopeWithParenthesis.trimmingCharacters(in: CharacterSet(charactersIn: "()"))
-        
-        return CommitMessage(
-            type: type,
-            scope: scope,
-            description: description
-        )
     }
 }
 
