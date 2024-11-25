@@ -195,9 +195,14 @@ actor OllamaService: AIServiceProtocol {
     private func parseCommitMessage(_ message: String) throws -> CommitMessage {
         // Remove any preceding text if present
         let actualMessage = message.components(separatedBy: ":\n").last ?? message
+        let actualMessage2 = actualMessage.contains("`") ?
+        actualMessage.split(separator: "`")[safe: 1].map(String.init) ?? actualMessage :
+        actualMessage
+//        let actualMessage3 = actualMessage2.components(separatedBy: "\"\n").last ?? actualMessage2
         
-        let messageParts = actualMessage.split(separator: ":", maxSplits: 1)
+        let messageParts = actualMessage2.split(separator: ":", maxSplits: 1)
         guard messageParts.count == 2 else {
+            print("message is : \(message)")
             throw CLIError.aiGenerationFailed("Invalid commit message format: missing description")
         }
         
@@ -214,7 +219,7 @@ actor OllamaService: AIServiceProtocol {
 //            print("typeScopeParts is : \(typeScopeParts)")
             guard
                 let typeString = typeScopeParts.first.map(String.init),
-                let type = CommitType(rawValue: typeString),
+                let type = CommitType(rawValue: typeString.lowercased()),
                 let scopeWithParenthesis = typeScopeParts.last.map(String.init)
             else {
                 print("message is : \(message)")
@@ -225,7 +230,7 @@ actor OllamaService: AIServiceProtocol {
             return CommitMessage(type: type, scope: scope, description: description)
         } else {
             // Handle type without scope
-            guard let type = CommitType(rawValue: typeAndScope) else {
+            guard let type = CommitType(rawValue: typeAndScope.lowercased()) else {
                 print("message is : \(message)")
                 print("typeAndScope is : \(typeAndScope)")
                 throw CLIError.aiGenerationFailed("Invalid commit type")
@@ -243,5 +248,11 @@ extension OllamaService{
     
     func getBaseUrl() async -> String? {
         return config.baseURL.absoluteString
+    }
+}
+// Helper extension for safe array access
+extension Array {
+    subscript(safe index: Index) -> Element? {
+        indices.contains(index) ? self[index] : nil
     }
 }
