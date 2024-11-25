@@ -18,7 +18,7 @@ protocol GitServiceProtocol: Sendable {
 @available(macOS 14.0, *)
 actor GitService: GitServiceProtocol {
   private let shell: ShellServiceProtocol
-  private let logger: Logger = Logger(isVerbose: true)
+  private let logger: Logger = Logger(isVerbose: false)
   
   init(shell: ShellServiceProtocol = ShellService()) {
     self.shell = shell
