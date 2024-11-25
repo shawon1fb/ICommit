@@ -18,7 +18,7 @@ swift build -c release
 sudo cp .build/release/ICommit /usr/local/bin/
 
 # Run
-i-commit
+ICommit
 ```
 
 ## Requirements
