@@ -18,3 +18,24 @@ actor ConsoleIO {
         print("Error: \(error.localizedDescription)".red)
     }
 }
+
+// Add this to ConsoleIO class
+extension ConsoleIO {
+    func askForChoice(options: Int) async -> Int {
+        while true {
+            if let input = await askForInput("Enter your choice (1-\(options)):"),
+               let choice = Int(input),
+               choice >= 1 && choice <= options {
+                return choice
+            }
+            print("Invalid choice. Please enter a number between 1 and \(options)".red)
+        }
+    }
+}
+
+extension ConsoleIO {
+    func askForInput(_ prompt: String) async -> String? {
+        print(prompt.yellow)
+        return readLine()?.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
