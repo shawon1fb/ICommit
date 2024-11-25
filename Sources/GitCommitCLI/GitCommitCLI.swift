@@ -77,7 +77,7 @@ struct GitCommitCLI: ParsableCommand, Decodable {
     var commitMessage = try await aiService.generateCommitMessage(for: files)
     await spinner.stop()
 
-    print("\nGenerated commit message: ".yellow + commitMessage.formatted)
+//    print("\nGenerated commit message: ".yellow + commitMessage.formatted)
 
     //TODO: add option to regenerate commit message again
     // TODO: add option to edit generated message
