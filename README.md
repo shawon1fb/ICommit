@@ -43,7 +43,7 @@ export OLLAMA_MODEL=your_model       # Default: llama2
 git add .
 
 # Generate commit message
-i-commit
+ICommit
 
 # Review options:
 # 1. Accept generated message
