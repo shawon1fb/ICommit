@@ -41,13 +41,28 @@ ICommit
 - macOS 14.0+
 - Ollama running locally
 
-## ⚙️ Custom Setup (Optional)
+## ⚙️ Configuration
+
+Configure Ollama by setting these environment variables:
 
 ```bash
-# Configure Ollama
-export OLLAMA_HOST=your_server_ip    # Default: localhost
-export OLLAMA_PORT=11434             # Default: 11434
-export OLLAMA_MODEL=your_model       # Default: llama2
+# Ollama Connection Settings
+export OLLAMA_HOST=your_server_ip     # Default: localhost
+export OLLAMA_PORT=11434              # Default: 11434
+export OLLAMA_SCHEME=http             # Default: http
+export OLLAMA_MODEL=your_model        # Default: llama2
+```
+
+### Connection Examples
+
+```bash
+# Local setup (default)
+export OLLAMA_HOST=localhost
+export OLLAMA_SCHEME=http
+
+# Remote server with HTTPS
+export OLLAMA_HOST=ai.example.com
+export OLLAMA_SCHEME=https
 ```
 
 ## 🤔 Common Issues
@@ -55,9 +70,12 @@ export OLLAMA_MODEL=your_model       # Default: llama2
 1. **Nothing happens?**
    - Check if Ollama is running
    - Make sure you staged files (`git add`)
+   - Verify your connection settings (HOST/PORT/SCHEME)
 
-2. **Custom server?**
-   - Update OLLAMA_HOST in Custom Setup
+2. **Connection failed?**
+   - Check if OLLAMA_SCHEME matches your server (http/https)
+   - Ensure OLLAMA_HOST is correctly set
+   - Verify the port is accessible
 
 Need more help? [Open an issue](https://github.com/shawon1fb/ICommit/issues)
 
