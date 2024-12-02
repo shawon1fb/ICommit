@@ -135,7 +135,13 @@ actor OllamaService: AIServiceProtocol {
   func promptForModelSelection() async throws -> String {
     let models = try await getAIModels()
     guard !models.isEmpty else {
-      throw CLIError.aiGenerationFailed("No AI models available")
+//      throw CLIError.aiGenerationFailed("No AI models available")
+        throw CLIError.aiGenerationFailed("""
+               No AI models available. Please pull a model first using:
+               ollama pull llama3.2
+               
+               Then try again.
+               """)
     }
 
     print("\nAvailable models:".blue)
