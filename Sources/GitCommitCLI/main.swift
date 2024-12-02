@@ -15,6 +15,6 @@ do{
     try await MainCommand.main()
 }
 catch let error{
-    print("Error: \(error)".red)
+    print("Error: \(error.localizedDescription)".red)
 }
 
